@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasteofbandung/core/utils/_utils.dart';
+import 'package:tasteofbandung/core/bases/widgets/_widgets.dart';
 import 'package:tasteofbandung/features/bookmark/bookmark_page.dart';
 import 'package:tasteofbandung/features/home/home_page.dart';
 import 'package:tasteofbandung/features/profile/profile_page.dart';

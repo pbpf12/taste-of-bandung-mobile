@@ -58,3 +58,6 @@ app.*.map.json
 # Formatting related
 .prettierignore
 .prettierrc
+
+# Ignore selected_base_url.dart
+lib/core/environments/selected_base_url.dart
