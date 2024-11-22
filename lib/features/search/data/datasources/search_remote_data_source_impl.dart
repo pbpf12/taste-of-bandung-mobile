@@ -2,7 +2,7 @@ part of '_datasources.dart';
 
 @Injectable(as: SearchRemoteDataSource)
 class SearchRemoteDataSourcesImplementation implements SearchRemoteDataSource {
-  final baseUrl = EndPoints().prodBaseUrl;
+  final baseUrl = EndPoints().myBaseUrl;
   final paths = EndPoints().searchPaths;
 
   @override

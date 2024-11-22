@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       String password = _passwordController.text;
 
                       final response = await request.login(
-                        "http://${EndPoints().devBaseUrlEmulator}/auth/login/",
+                        "http://${EndPoints().myBaseUrl}/auth/login/",
                         {
                           'username': username,
                           'password': password,

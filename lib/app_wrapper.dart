@@ -6,6 +6,8 @@ import 'package:tasteofbandung/main_screen.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'core/environments/_environments.dart';
+
 class AppWrapper extends StatefulWidget {
   const AppWrapper({super.key});
 
@@ -32,8 +34,8 @@ class _AppWrapperState extends State<AppWrapper> {
       if (storedCredentials != null) {
         final credentials = jsonDecode(storedCredentials);
 
-        final response = await request.login(
-          "http://10.0.2.2:8000/auth/login/",
+        await request.login(
+          "http://${EndPoints().myBaseUrl}/auth/login/",
           {
             'username': credentials['username'],
             'password': credentials['password'],

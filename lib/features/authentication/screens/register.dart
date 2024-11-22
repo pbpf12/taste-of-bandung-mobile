@@ -117,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       String password2 = _confirmPasswordController.text;
 
                       final response = await request.postJson(
-                          "http://${EndPoints().devBaseUrlEmulator}/auth/register/",
+                          "http://${EndPoints().myBaseUrl}/auth/register/",
                           jsonEncode({
                             "username": username,
                             "password1": password1,
