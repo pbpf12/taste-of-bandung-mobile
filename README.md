@@ -27,7 +27,7 @@ Ingin berbagi pengalaman kuliner Anda dengan komunitas? Kami juga menyediakan si
 | **Authentication**            | _SEMUA_      | Membuat akun pengguna dan melakukan verifikasi informasi pengguna. Akses ke situs aplikasi hanya diberikan jika pengguna berhasil terotentikasi.|                                   
 | **User Profile Screen**     | Alex         |Menampilkan informasi pengguna, seperti email, nama depan, dan nama belakang, serta riwayat kunjungan ke berbagai halaman detail produk.|
 | **Home Screen**   | Zillan       | Halaman utama yang ditampilkan setelah pengguna berhasil login, menampilkan 3 produk kuliner teratas berdasarkan rating terbaru.|
-| **Product Details**  | Salim        | Menyediakan informasi lengkap mengenai suatu produk kuliner. Pengguna dapat memberikan ulasan, melakukan vote atau downvote pada review, melihat informasi restoran terkait, dan menambahkan produk ke dalam bookmark.|
+| **Product Detail Screen**  | Salim        | Menyediakan informasi lengkap mengenai suatu produk kuliner. Pengguna dapat memberikan ulasan, melakukan vote atau downvote pada review, melihat informasi restoran terkait, dan menambahkan produk ke dalam bookmark.|
 | **Search Screen**           | Rafie        | Halaman pencarian yang memungkinkan pengguna mencari produk berdasarkan filter seperti urutan harga (termurah hingga termahal), harga minimum dan maksimum, kategori (makanan, minuman, atau keduanya), dan nama kuliner.|
 | **BookMarks Screen**   | Figo         | Menampilkan semua produk yang telah ditandai (bookmark) oleh pengguna, serta menyediakan opsi untuk menghapus produk dari bookmark.|
 
@@ -51,7 +51,7 @@ Sumber inisial dataset dapat dilihat dari :
 
 Menggunakan domain **rahardi-salim-tasteofbandung.pbp.cs.ui.ac.id** serta proses penyimpanan cookies dan kredensial pengguna (username & password) di **local storage** dengan bantuan **pbp_django_auth**, berikut langkah-langkahnya:
 
-### 1. Pengecekan Kredensial Pengguna
+### 1. Pengecekan Kredensial Pengguna untuk Autentikasi Otomatis
 - Sistem akan memeriksa apakah pengguna sudah pernah login sebelumnya di file `lib/app_wrapper.dart`.  
 - Jika sudah, pengguna akan langsung diarahkan ke halaman utama tanpa perlu login ulang.
 
@@ -60,17 +60,38 @@ Menggunakan domain **rahardi-salim-tasteofbandung.pbp.cs.ui.ac.id** serta proses
 - Setelah berhasil login, kredensial pengguna dan cookies akan disimpan di **local storage**, yang akan digunakan untuk request selanjutnya.
 - Jika pengguna belum memiliki akun, mereka dapat mengklik opsi "Register" untuk diarahkan ke halaman registrasi (`lib/features/authentication/screens/register.dart`) melalui path `'auth/register'`.
 
-### 3. Operasi CRUD dengan Web Service
-- Cookies dan pengiriman request akan secara otomatis ditangani oleh **pbp_django_auth**.
-- Developer hanya perlu menyediakan:
-  - **URL**: Endpoint yang akan diakses.
-  - **Query**: Parameter tambahan (jika ada).
-  - **Data**: Informasi yang akan dikirim bersama request.
-
-### 4. Menghapus Kredensial Pengguna
+### 3. Menghapus Kredensial Pengguna
 - Logout dilakukan melalui path `'auth/logout'`, yang akan:
   - Menghapus cookies.
   - Menghapus kredensial pengguna dari **local storage**.
   - Mengarahkan pengguna kembali ke halaman login.
 
-Dengan alur ini, integrasi menjadi lebih efisien dan mempermudah pengelolaan autentikasi serta operasi pada modul web service.
+### 4. Contoh Implementasi di Modul
+Operasi pencarian dan pengelolaan data produk dilakukan melalui endpoint tertentu. Berikut detailnya:
+- **Search Screen**  
+  Mengambil data produk berdasarkan filter dan query tertentu.  
+  - **Path**: **`get-dishes/`**  
+  - **Operasi**: **`GET`**  
+  - **Parameter**:  
+    - `name`: Filter berdasarkan nama produk.  
+    - `category`: Filter berdasarkan kategori produk.  
+    - `price_min`: Filter harga minimum produk.  
+    - `price_max`: Filter harga maksimum produk.  
+    - `sort_by`: Opsi pengurutan data (contoh: harga, nama).  
+    - `page`: Pagination untuk navigasi hasil pencarian.  
+- **Home Screen**  
+  Mengambil informasi 3 makanan teratas dari database produk.  
+  - **Path**: **`top_dishes/`**  
+  - **Operasi**: **`GET`**  
+- **Product Detail Screen**  
+  Menampilkan informasi lengkap mengenai makanan, termasuk nama, deskripsi, harga, restoran terkait, serta rating makanan.
+  - **Path**: **`dish/<int:dish_id>/`**  
+  - **Operasi**: **`GET`**  
+- **User Profile Screen**  
+  Menampilkan informasi user berupa nama pengguna dan email.
+  - **Path**: **`profile/`**  
+  - **Operasi**: **`GET`** 
+- **Bookmarks** 
+   Menampilkan dan menghapus produk yang di save ke dalam bookmarks
+   - **Path**: **`last_activities_page/`**  
+   - **Operasi**: **`GET`**

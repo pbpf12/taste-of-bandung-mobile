@@ -1,5 +1,6 @@
 # Getting Started IMPORTANT!
-
+### Deskripsi:
+MUST IMPLEMENT !!!!
 ### Langkah:
 - pastikan *django taste of bandung* sudah up to date dengan commit terakhir
 - run *django taste of bandung*
@@ -8,13 +9,13 @@
     import '../bases/enums/my_backend.dart';
 
     class SelectedBaseUrl {
-    final domain = MyBackend.LOCALHOST_EMULATOR; // Sesuaikan dengan Perangkat Debugging
+        final domain = MyBackend.LOCALHOST_EMULATOR; // Sesuaikan dengan Perangkat Debugging
     }
     ```
 - run flutter
-
 ### Detail:
-* pilihan dari MyBackend ada PRODUCTION, LOCALHOST_EMULATOR, LOCALHOST_WEB,
+* pilihan dari MyBackend ada PRODUCTION, LOCALHOST_EMULATOR, LOCALHOST_WEB
+* contoh penggunaan dapat dilihat di lib/features/authentication/login.dart
 * berikut detail gambar yang dapat membantu
     ![Lokasi File `selected_base_url.dart`](file_location.png)
     ![Isi dari File `selected_base_url.dart`](isi_file.png)

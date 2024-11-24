@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/themes/color/theme.dart';
 import '../authentication/screens/login.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,11 +17,13 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return SafeArea(
       child: Column(
         children: [
-          // Nitip yaa Lex ^w^ Kalo mau ubah buttonnya, jangan sampe logic onPressed nya keubah
+          // Nitip yaa Lex ^w^ Kalo mau ubah buttonnya, 
+          // jangan sampe logic onPressed dan onChanged nya keubah
           ElevatedButton(
             onPressed: () async {
               final response = await request.logout(
@@ -51,7 +55,13 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             },
             child: const Text('Logout'),
-          )
+          ),
+          CupertinoSwitch(
+            value: themeProvider.isDarkMode,
+            onChanged: (value) {
+              themeProvider.toggleTheme();
+            },
+          ),
         ],
       ),
     );

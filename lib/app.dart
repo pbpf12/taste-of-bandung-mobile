@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tasteofbandung/app_wrapper.dart';
 import 'package:provider/provider.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:tasteofbandung/app_wrapper.dart';
+import 'package:tasteofbandung/core/themes/color/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -14,17 +14,11 @@ class App extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
 
-    return Provider(
-      create: (_) {
-        CookieRequest request = CookieRequest();
-        return request;
-      },
-      child: MaterialApp(
-        title: "Taste of Bandung",
-        theme: ThemeData.dark(),
-        debugShowCheckedModeBanner: false,
-        home: const AppWrapper()
-      ),
+    return MaterialApp(
+      title: "Taste of Bandung",
+      theme: Provider.of<ThemeProvider>(context).themeData,
+      debugShowCheckedModeBanner: false,
+      home: const AppWrapper(),
     );
   }
 }
