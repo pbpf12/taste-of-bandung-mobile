@@ -31,6 +31,9 @@ Ingin berbagi pengalaman kuliner Anda dengan komunitas? Kami juga menyediakan si
 | **Search Screen**           | Rafie        | Halaman pencarian yang memungkinkan pengguna mencari produk berdasarkan filter seperti urutan harga (termurah hingga termahal), harga minimum dan maksimum, kategori (makanan, minuman, atau keduanya), dan nama kuliner.|
 | **BookMarks Screen**   | Figo         | Menampilkan semua produk yang telah ditandai (bookmark) oleh pengguna, serta menyediakan opsi untuk menghapus produk dari bookmark.|
 
+## Task Tracker PBPF12
+[Click Here!](https://docs.google.com/spreadsheets/d/1kPw_GBPV3jyydFvLUwXZOhVeboR62B5t0yiwjGNRQnw/edit?gid=0#gid=0)
+
 ## Sumber Inisial Dataset
 Sumber inisial dataset dapat dilihat dari :
 - [Sumber Dataset](https://docs.google.com/spreadsheets/d/16gu9gPa8Nin2xFiqhyMezOKgs5oYMscOEMwLaojXCeM/edit?usp=sharing)
