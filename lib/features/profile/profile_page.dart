@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/environments/_environments.dart';
 import '../../core/themes/color/theme.dart';
 import '../authentication/screens/login.dart';
 
@@ -27,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ElevatedButton(
             onPressed: () async {
               final response = await request.logout(
-                "http://10.0.2.2:8000/auth/logout/",
+                "http://${EndPoints().myBaseUrl}/auth/logout/",
               );
               String message = response["message"];
               if (context.mounted) {
