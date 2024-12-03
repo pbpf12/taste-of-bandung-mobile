@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/bases/widgets/_widgets.dart';
 import '../../core/environments/_environments.dart';
 import '../../core/themes/color/theme.dart';
 import '../authentication/screens/login.dart';
@@ -37,21 +38,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   await request.local.remove('user_credentials');
 
                   String uname = response["username"];
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("$message Sampai jumpa, $uname."),
-                    ),
-                  );
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
+                  SuccessMessenger("$message Sampai jumpa, $uname.").show(context);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(message),
-                    ),
-                  );
+                  ErrorMessenger(message).show(context);
                 }
               }
             },
