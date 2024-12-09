@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: themeProvider.isDarkMode
-              ? [Colors.brown.shade400, Colors.brown.shade900]
+              ? [Colors.brown.shade700, Colors.brown.shade900]
               : [Colors.yellow.shade100, Colors.orange.shade300],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight, 
