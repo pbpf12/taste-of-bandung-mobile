@@ -23,12 +23,12 @@ class DishModel {
     return DishModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? "",
-      restaurantName: json['restaurantName'] ?? "", 
+      restaurantName: json['restaurant__name'] ?? "", 
       description: json['description'] ?? "", 
       price: json['price'] ?? "0.00",
-      imageUrl: json['imageUrl'] ?? "",
-      bookMarkCount: json['bookMarkCount'] ?? 0,
-      averageRating: (json['averageRating'] ?? 0.0) as double,
+      imageUrl: json['image'] ?? "",
+      bookMarkCount: json['bookmark_count'] ?? 0,
+      averageRating: (json['averageRating'] ?? 0.0) as double, // nih buat masalah
     );
   }
 

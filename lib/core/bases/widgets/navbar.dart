@@ -26,15 +26,16 @@ class TobBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
-      height: 70,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20)
-        ),
+      height: 50,
+      decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: Colors.white)
+          top: BorderSide(
+            color: themeProvider.isDarkMode
+              ? Colors.white : Colors.black
+          )
         )
       ),
       child: Row(
@@ -44,13 +45,6 @@ class TobBottomNavigationBar extends StatelessWidget {
             final feature = features[index];
             return Expanded(
               child: InkWell(
-                borderRadius: 
-                  index == 0 || index == features.length - 1
-                    ? const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)
-                      )
-                    : BorderRadius.circular(0),
                 onTap: () => onTap(feature),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -59,9 +53,10 @@ class TobBottomNavigationBar extends StatelessWidget {
                       feature.icon,
                       shadows: List.generate(2, (index) {
                         if (feature == selectedFeauture) {
-                          return const Shadow(
-                            offset: Offset(1, 1),
-                            color: Colors.white,
+                          return Shadow(
+                            offset: const Offset(1, 1),
+                            color: themeProvider.isDarkMode
+                              ? Colors.white : Colors.black,
                             blurRadius: 50
                           );
                         }
