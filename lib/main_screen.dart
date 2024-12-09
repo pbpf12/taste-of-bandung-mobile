@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasteofbandung/core/bases/widgets/_widgets.dart';
 import 'package:tasteofbandung/features/bookmark/bookmark_page.dart';
 import 'package:tasteofbandung/features/home/home_page.dart';
-import 'package:tasteofbandung/features/profile/profile_page.dart';
+import 'features/profile/presentation/pages/_pages.dart';
 import 'features/search/presentation/pages/_pages.dart';
 
 class MainScreen extends StatefulWidget {
