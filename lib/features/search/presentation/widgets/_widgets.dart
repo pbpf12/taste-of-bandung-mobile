@@ -5,7 +5,6 @@ import 'package:tasteofbandung/core/themes/color/theme.dart';
 import 'package:tasteofbandung/features/search/data/models/dish_model.dart';
 
 import '../../../../core/constants/_constants.dart';
-import '../../../prodetail/prodetail_screen.dart';
 
 part 'dish_card.dart';
 part 'dish_card_skeleton.dart';
