@@ -35,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BlocBuilder<ProfileCubit, ProfileState>(
+            bloc: _profileCubit,
             builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
