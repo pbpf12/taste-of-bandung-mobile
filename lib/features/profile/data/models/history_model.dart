@@ -1,35 +1,27 @@
+import 'package:tasteofbandung/features/search/data/models/dish_model.dart';
+
 class HistoryModel {
-  final int id;
-  final int userId;
-  final int dishId;
+  final DishModel dish;
   final DateTime createdAt;
 
   HistoryModel({
-    required this.id,
-    required this.userId,
-    required this.dishId,
+    required this.dish,
     required this.createdAt,
   });
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) {
     return HistoryModel(
-      id: json['id'] ?? 0,
-      userId: json['userId'] ?? 0,
-      dishId: json['dishId'] ?? 0,
+      dish: DishModel.fromJson(json['dish'] ?? {}),
       createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toString()),
     );
   }
 
   HistoryModel copyWith({
-    int? id,
-    int? userId,
-    int? dishId,
+    DishModel? dish,
     DateTime? createdAt,
   }) {
     return HistoryModel(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      dishId: dishId ?? this.dishId,
+      dish: dish ?? this.dish,
       createdAt: createdAt ?? this.createdAt,
     );
   }

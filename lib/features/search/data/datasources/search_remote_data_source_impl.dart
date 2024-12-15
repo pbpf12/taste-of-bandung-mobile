@@ -6,13 +6,11 @@ class SearchRemoteDataSourcesImplementation implements SearchRemoteDataSource {
   final paths = EndPoints().searchPaths;
 
   @override
-  Future<Either<Exception, Map<String,dynamic>>> getDishes(int page) async {
+  Future<Either<Exception, Map<String, dynamic>>> getDishes(int page) async {
     List<DishModel> dishes = [];
 
     try {
-      final uri = Uri.http(baseUrl, paths.getDishes, {
-        "page": "1"
-      });
+      final uri = Uri.http(baseUrl, paths.getDishes, {"page": "1"});
 
       final response = await http.get(uri);
 
@@ -22,11 +20,11 @@ class SearchRemoteDataSourcesImplementation implements SearchRemoteDataSource {
         dishes = (jsonResponse['dishes'] as List)
             .map((json) => DishModel.fromJson(json))
             .toList();
-        
+
         int minPage = jsonResponse['min_page'] as int;
         int maxPage = jsonResponse['max_page'] as int;
 
-        Map<String,dynamic> data = {
+        Map<String, dynamic> data = {
           'dishes': dishes,
           'min_page': minPage,
           'max_page': maxPage,
@@ -40,5 +38,4 @@ class SearchRemoteDataSourcesImplementation implements SearchRemoteDataSource {
       throw Left(Exception('Error: $e'));
     }
   }
-
 }

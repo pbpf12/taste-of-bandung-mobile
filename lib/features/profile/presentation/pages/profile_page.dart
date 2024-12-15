@@ -23,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  Future<void> retrieveData() async => _profileCubit.retrieveData(context);
+  Future<void> retrieveData() async => _profileCubit.retrieveData();
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
           child: BlocBuilder<ProfileCubit, ProfileState>(
             bloc: _profileCubit,
             builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state.isError) {
-                  return Center(child: Text("Error: ${state.isError}"));
-                } else if (state.isLoaded) {
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state.isError) {
+                return Center(child: Text("Error: ${state.isError}"));
+              } else if (state.isLoaded) {
                 final user = state.user;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
