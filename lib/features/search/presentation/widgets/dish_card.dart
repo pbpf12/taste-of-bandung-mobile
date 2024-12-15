@@ -12,40 +12,40 @@ class DishCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
+    print(dish.imageUrl);
 
     return InkWell(
       onTap: () => onTap!(dish.id),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: _themeProvider.isDarkMode
               ? Colors.grey.shade900 : Colors.white
           )
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           child: Stack(
             children: [
               Positioned.fill(
-                child: Image.network(
-                  filterQuality: FilterQuality.low,
-                  dish.imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: dish.imageUrl,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline_sharp),
-                        Text(
-                          'Fail to Load this Image',
-                        )
-                      ],
-                    );
-                  },
+                  filterQuality: FilterQuality.low,
+                 
+                  errorWidget: (context, url, error) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline_sharp),
+                      Text(
+                        'Fail to Load this Image',
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned.fill(
@@ -73,9 +73,8 @@ class DishCard extends StatelessWidget {
                     Text(
                       dish.name,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: _themeProvider.isDarkMode
-                          ? Colors.black : Colors.white,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -85,20 +84,18 @@ class DishCard extends StatelessWidget {
                         (match) => '${match.group(1)}.'
                       )}',
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: _themeProvider.isDarkMode
-                            ? Colors.black : Colors.white,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: List.generate(5, (index) {
-                        return Icon(
+                        return const Icon(
                           Icons.star,
-                          color: _themeProvider.isDarkMode
-                            ? Colors.yellow.shade700 : Colors.yellow,
-                          size: 17.5,
+                          color: Colors.yellow,
+                          size: 14,
                         );
                       }),
                       

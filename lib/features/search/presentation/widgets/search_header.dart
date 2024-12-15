@@ -18,7 +18,12 @@ class SearchHeader extends StatelessWidget {
           image: AssetImage(
             themeProvider.isDarkMode
               ? Assets.image.bandungMalam : Assets.image.bandungSiang),
-          fit: BoxFit.cover
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            themeProvider.isDarkMode
+              ? Colors.brown.shade300.withOpacity(0.25) : Colors.orange.shade300.withOpacity(0.25),
+            BlendMode.srcOver, 
+          ),
         )
       ),
       child: Container(

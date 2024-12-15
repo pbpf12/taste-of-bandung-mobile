@@ -1,12 +1,10 @@
 part of '_widgets.dart';
 
 class DishView extends StatelessWidget {
-  final List<DishModel> dishes;
-  final void Function(int id)? onTap;
+  final List<DishCard> dishCardWidgets;
 
   const DishView({
-    required this.dishes,
-    required this.onTap,
+    required this.dishCardWidgets,
     super.key
   });
 
@@ -19,7 +17,7 @@ class DishView extends StatelessWidget {
         gradient: LinearGradient(
           colors: _themeProvider.isDarkMode
             ? [Colors.brown.shade700, Colors.brown.shade900]
-            : [Colors.yellow.shade100, Colors.orange.shade300],
+            : [Colors.orange.shade300, Colors.yellow.shade100],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight, 
         )
@@ -37,9 +35,7 @@ class DishView extends StatelessWidget {
             mainAxisSpacing: 20,
             childAspectRatio: 1.2,
           ),
-          children: dishes.map( (dish) {
-            return DishCard(dish: dish, onTap: onTap,);
-          }).toList(),
+          children: dishCardWidgets,
         ),
       )
     );

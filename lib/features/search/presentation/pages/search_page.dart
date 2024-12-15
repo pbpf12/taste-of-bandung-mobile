@@ -77,8 +77,10 @@ class _SearchPageState extends State<SearchPage> {
                         return Column(
                           children: [
                             DishView(
-                              dishes: state.dishes,
-                              onTap: goToDetailScreen,
+                              dishCardWidgets: state.dishes.map(
+                                (dish) => DishCard(
+                                  onTap: goToDetailScreen, dish: dish) 
+                              ).toList()
                             ),
                             if (state.isLoading) 
                               const DishViewSkeleton()

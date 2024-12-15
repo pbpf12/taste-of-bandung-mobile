@@ -9,13 +9,9 @@ class DishViewSkeleton extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: themeProvider.isDarkMode
-              ? [Colors.brown.shade400, Colors.brown.shade900]
-              : [Colors.yellow.shade100, Colors.orange.shade300],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: themeProvider.isDarkMode
+          ? Colors.brown.shade900
+          : Colors.orange.shade100,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

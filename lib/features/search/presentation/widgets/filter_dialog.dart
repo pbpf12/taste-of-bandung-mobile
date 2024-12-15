@@ -6,7 +6,14 @@ class FilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("kucing"),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10)
+      ),
+      content: ListView(
+        children: [
+          
+        ],
+      ),
     );
   }
 }
