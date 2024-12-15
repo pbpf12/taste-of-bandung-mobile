@@ -11,8 +11,7 @@ class DishCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
-    print(dish.imageUrl);
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
 
     return InkWell(
       onTap: () => onTap!(dish.id),
@@ -20,7 +19,7 @@ class DishCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: _themeProvider.isDarkMode
+            color: themeProvider.isDarkMode
               ? Colors.grey.shade900 : Colors.white
           )
         ),
@@ -54,7 +53,7 @@ class DishCard extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [
                         Colors.transparent,
-                        _themeProvider.isDarkMode
+                        themeProvider.isDarkMode
                           ? Colors.black.withOpacity(0.8) : Colors.grey.shade700,
                       ],
                       begin: Alignment.topCenter,
