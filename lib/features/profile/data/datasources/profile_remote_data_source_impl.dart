@@ -31,11 +31,9 @@ class ProfileRemoteDataSourcesImplementation
     try {
       final request = CookieRequest();
       final response =
-          await request.get("http://${EndPoints().myBaseUrl}/show_json");
-      print(response);
-
-      final UserModel user = UserModel.fromJson(response['data']);
-      print(user);
+          await request.get("http://${EndPoints().myBaseUrl}/show_json/");
+      final user = UserModel.fromJson(response);
+      
       return Right(user);
     } catch (e) {
       throw Left(Exception('Error: $e'));

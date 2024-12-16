@@ -23,12 +23,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   void setHistoryData(List<HistoryModel> newHistorydata) {
-    print(newHistorydata);
     emit(state.copyWith(history: newHistorydata));
   }
 
   void setProfileData(UserModel newUserData) {
-    print(newUserData);
     emit(state.copyWith(user: newUserData));
   }
 
@@ -39,7 +37,6 @@ class ProfileCubit extends Cubit<ProfileState> {
       final resp2 = await _remoteDataSource.getHistory();
 
       await resp.fold((failure) async {
-        print('Error loading user data: $failure');
         setApiRequestStatus('ERROR LOADING USER');
       }, (success) async {
         setApiRequestStatus('LOADED USER');
@@ -54,8 +51,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         final data = success;
         setHistoryData(data);
       });
+
+      setApiRequestStatus('LOADED');
     } catch (e) {
-      setApiRequestStatus('ERROR LOADING DATA');
+      setApiRequestStatus('ERROR');
     }
   }
 }

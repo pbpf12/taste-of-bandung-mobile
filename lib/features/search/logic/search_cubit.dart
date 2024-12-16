@@ -6,7 +6,7 @@ class SearchCubit extends Cubit<SearchState>{
 
   SearchCubit(
     this._remoteDataSource
-  ) : super(SearchState());
+  ) : super(const SearchState());
 
   void setApiRequestStatus(String status) async {
     if (kDebugMode) {

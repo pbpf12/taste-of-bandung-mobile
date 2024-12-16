@@ -42,15 +42,15 @@ class _ProfilePageState extends State<ProfilePage> {
               } else if (state.isError) {
                 return Center(child: Text("Error: ${state.isError}"));
               } else if (state.isLoaded) {
-                final user = state.user;
+                final user = state.user!;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
+                        CircleAvatar( 
                           child: Text(
-                            "${user?.firstName[0]}${user?.lastName[0]}",
+                            user.username,
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${user?.firstName} ${user?.lastName}",
+                              "${user?.firstName ?? 'Not provided'} ${user?.lastName ?? 'Not provided'}",
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
