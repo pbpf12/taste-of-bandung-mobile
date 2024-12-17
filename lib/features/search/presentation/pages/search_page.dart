@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
       => const FilterDialog());
   void goToDetailScreen(int dishId) 
     => Navigator.of(context).push(MaterialPageRoute(builder: (context) 
-      => ProdetailScreen(dihsId: dishId)));
+      => ProdetailScreen(dishId: dishId)));
 
   @override
   Widget build(BuildContext context) {
