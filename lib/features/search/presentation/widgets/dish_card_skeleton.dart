@@ -5,9 +5,15 @@ class DishCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade400,
-      highlightColor: Colors.white,
+      baseColor: themeProvider.isDarkMode
+        ? Colors.grey.shade700
+        : Colors.grey.shade300,
+    highlightColor: themeProvider.isDarkMode
+        ? Colors.grey.shade900
+        : Colors.grey.shade400,
       direction: ShimmerDirection.ltr,
       child: Container(
         decoration: BoxDecoration(

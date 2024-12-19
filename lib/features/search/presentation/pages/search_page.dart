@@ -42,56 +42,68 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
 
     return BlocSelector<SearchCubit, SearchState, ScrollController>(
       bloc: _searchCubit,
       selector: (state) => state.scrollController,
       builder: (context, scrollController) {
         return SafeArea(
-          child: RefreshIndicator(
-            onRefresh: () => retrieveData(),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Column(
-                children: [
-                  SearchHeader(
-                    children: [
-                      SearchFilterBar(
-                        onChanged: setName,
-                        onTap: showFilterDialog,
-                      ),
-                    ]
-                  ),
-                  BlocBuilder<SearchCubit, SearchState>(
-                    bloc: _searchCubit,
-                    builder: (context, state) {
-                      if (state.dishes.isEmpty) {
-                        if (state.isLoading) {
-                          return const DishViewSkeleton();
-                        } else if (state.isError) {
-                          return const ErrorWarningSection();
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: themeProvider.isDarkMode
+                  ? [Colors.brown.shade700, Colors.brown.shade900]
+                  : [Colors.orange.shade300, Colors.yellow.shade100],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight, 
+              )
+            ),
+            child: RefreshIndicator(
+              onRefresh: () => retrieveData(),
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    SearchHeader(
+                      children: [
+                        SearchFilterBar(
+                          onChanged: setName,
+                          onTap: showFilterDialog,
+                        ),
+                      ]
+                    ),
+                    BlocBuilder<SearchCubit, SearchState>(
+                      bloc: _searchCubit,
+                      builder: (context, state) {
+                        if (state.dishes.isEmpty) {
+                          if (state.isLoading) {
+                            return const DishViewSkeleton();
+                          } else if (state.isError) {
+                            return const ErrorWarningSection();
+                          }
+            
+                          return const EmptyDataSection();
+                        } else {
+                          return Column(
+                            children: [
+                              DishView(
+                                dishCardWidgets: state.dishes.map(
+                                  (dish) => DishCard(
+                                    onTap: goToDetailScreen, dish: dish) 
+                                ).toList()
+                              ),
+                              if (state.isLoading) 
+                                const DishViewSkeleton()
+                              else if (state.isError)
+                                const ErrorWarningSection()
+                            ],
+                          );
                         }
-          
-                        return const EmptyDataSection();
-                      } else {
-                        return Column(
-                          children: [
-                            DishView(
-                              dishCardWidgets: state.dishes.map(
-                                (dish) => DishCard(
-                                  onTap: goToDetailScreen, dish: dish) 
-                              ).toList()
-                            ),
-                            if (state.isLoading) 
-                              const DishViewSkeleton()
-                            else if (state.isError)
-                              const ErrorWarningSection()
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
