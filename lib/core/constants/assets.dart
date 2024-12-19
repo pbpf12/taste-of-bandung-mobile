@@ -15,4 +15,6 @@ class _ImageAssets {
   final String _basePath = 'assets/images';
   
   String get logo => '$_basePath/logo.png';
+  String get bandungSiang => '$_basePath/bandung_siang.jpg';
+  String get bandungMalam => '$_basePath/bandung_malam.jpg';
 }

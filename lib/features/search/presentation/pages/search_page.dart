@@ -23,103 +23,80 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
+  void setName(String newName) => _searchCubit.setName(newName);
+  void setCategory(String newCategory) => _searchCubit.setCategory(newCategory);
+  void setMinPage(int newMinPage) => _searchCubit.setMinPage(newMinPage);
+  void setMaxPage(int newMaxPage) => _searchCubit.setMaxPage(newMaxPage);
+  void setPriceMin(String newPriceMin) => _searchCubit.setPriceMin(newPriceMin);
+  void setPriceMax(String newPriceMax) => _searchCubit.setPriceMax(newPriceMax);
+  void setSortBy(String newSortBy) => _searchCubit.setSortBy(newSortBy);
   Future<void> retrieveData() async => _searchCubit.retrieveData();
+  Future<void> retrieveMoreData() async => _searchCubit.retrieveMoreData();
+
+  void showFilterDialog() 
+    => showDialog(context: context, builder: (context) 
+      => const FilterDialog());
+  void goToDetailScreen(int dishId) 
+    => Navigator.of(context).push(MaterialPageRoute(builder: (context) 
+      => ProdetailScreen(dihsId: dishId)));
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( 
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 300,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.yellow.shade300,
-                  Colors.yellow.shade700,
-                ],
-                begin: Alignment.topLeft, 
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.search, color: Colors.grey.shade700, size: 30,),
-                      Icon(Icons.filter_alt_rounded, color: Colors.grey.shade700, size: 25,)
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20,),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20,),
-          SizedBox(
+
+    return BlocSelector<SearchCubit, SearchState, ScrollController>(
+      bloc: _searchCubit,
+      selector: (state) => state.scrollController,
+      builder: (context, scrollController) {
+        return SafeArea(
+          child: RefreshIndicator(
+            onRefresh: () => retrieveData(),
             child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(10, (index) {
-                return InkWell(
-                  onTap: () {
-                    SuccessMessenger("Bahahaha").show(context);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 5, left: 15),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade700,
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: const Text("show bar"),
+              controller: scrollController,
+              child: Column(
+                children: [
+                  SearchHeader(
+                    children: [
+                      SearchFilterBar(
+                        onChanged: setName,
+                        onTap: showFilterDialog,
+                      ),
+                    ]
                   ),
-                );
-              }).toList(),
-              )
+                  BlocBuilder<SearchCubit, SearchState>(
+                    bloc: _searchCubit,
+                    builder: (context, state) {
+                      if (state.dishes.isEmpty) {
+                        if (state.isLoading) {
+                          return const DishViewSkeleton();
+                        } else if (state.isError) {
+                          return const ErrorWarningSection();
+                        }
+          
+                        return const EmptyDataSection();
+                      } else {
+                        return Column(
+                          children: [
+                            DishView(
+                              dishCardWidgets: state.dishes.map(
+                                (dish) => DishCard(
+                                  onTap: goToDetailScreen, dish: dish) 
+                              ).toList()
+                            ),
+                            if (state.isLoading) 
+                              const DishViewSkeleton()
+                            else if (state.isError)
+                              const ErrorWarningSection()
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-          BlocBuilder<SearchCubit, SearchState>(
-            bloc: _searchCubit,
-            builder: (context, state) {
-              return ListView.builder(
-                padding: const EdgeInsets.only(top: 10),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.dishes.length,
-                itemBuilder: (context, index) {
-                  final dish = state.dishes[index];
-                  return ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ProdetailScreen(dihsId: dish.id,)
-                    )),
-                    leading: const Icon(Icons.dining_sharp),
-                    title: Text(dish.name),
-                    trailing: Text(dish.price),
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
