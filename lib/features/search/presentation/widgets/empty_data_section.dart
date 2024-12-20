@@ -12,18 +12,19 @@ class _EmptyDataSectionState extends State<EmptyDataSection> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height - 300,
-      child: const Center(
+      child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 6),
+            const Icon(
               Icons.inbox,
               size: 100,
               color: Colors.grey,
             ),
-            SizedBox(height: 20),
-            Text(
-              'No Data Available',
+            const SizedBox(height: 20),
+            const Text(
+              'No Dishes Available',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey,

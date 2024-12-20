@@ -49,14 +49,18 @@ class SearchCubit extends Cubit<SearchState>{
   void setPriceMin(String newPriceMin) 
     => emit(state.copyWith(priceMin: newPriceMin));
   void setPriceMax(String newPriceMax) 
-    => emit(state.copyWith(category: newPriceMax));
+    => emit(state.copyWith(priceMax: newPriceMax));
   void setSortBy(String newSortBy) 
-    => emit(state.copyWith(category: newSortBy));
+    => emit(state.copyWith(sortBy: newSortBy));
   
 
   Future<void> retrieveData() async {
     try {
       setApiRequestStatus('LOADING');
+      
+      final previousDishes = state.dishes;
+      setInitialDishes([]);
+
       setCurrentPage(1);
       final resp = await _remoteDataSource.retrieveByGetDishes(
         state.name,
@@ -69,6 +73,7 @@ class SearchCubit extends Cubit<SearchState>{
 
       await resp.fold((failure) async {
         setApiRequestStatus('ERROR');
+        if (previousDishes.isNotEmpty) setInitialDishes(previousDishes);
       }, (success) async {
         setApiRequestStatus('LOADED');
         final data = success;
@@ -110,7 +115,6 @@ class SearchCubit extends Cubit<SearchState>{
   bool get _isBottom {
     final maxScroll = state.scrollController.position.maxScrollExtent;
     final currentScroll = state.scrollController.offset;
-    // print(currentScroll >= (maxScroll * 0.95) && _pageController.page == 0);
     return currentScroll >= (maxScroll * 0.95);
   }
 
