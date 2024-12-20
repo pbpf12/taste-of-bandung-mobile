@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tasteofbandung/core/themes/color/theme.dart';
@@ -16,3 +17,4 @@ part 'error_warning_section.dart';
 part 'search_header.dart';
 part 'search_filter_bar.dart';
 part 'filter_dialog.dart';
+part 'search_title_text.dart';

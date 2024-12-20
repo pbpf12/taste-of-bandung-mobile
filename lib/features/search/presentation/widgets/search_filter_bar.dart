@@ -37,6 +37,9 @@ class SearchFilterBar extends StatelessWidget {
               Expanded(
                 child: TextField(
                   onChanged: onChanged,
+                  cursorColor: themeProvider.isDarkMode
+                    ? Colors.white
+                    : Colors.black,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Search Products',

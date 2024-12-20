@@ -1,28 +1,52 @@
 part of '_widgets.dart';
 
+class FilterQuery {
+  String category;
+  String sortBy;
+  String priceMax;
+  String priceMin;
+
+  FilterQuery({
+    required this.category,
+    required this.sortBy,
+    required this.priceMin,
+    required this.priceMax,
+  });
+}
+
 class FilterDialog extends StatefulWidget {
-  const FilterDialog({super.key});
+  final FilterQuery query;
+
+  const FilterDialog({
+    required this.query, 
+    super.key
+  });
 
   @override
-  _FilterDialogState createState() => _FilterDialogState();
+  State<FilterDialog> createState() => _FilterDialogState();
 }
 
 class _FilterDialogState extends State<FilterDialog> {
-  String selectedSort = '~~~~'; // Default value
-  String selectedCategory = 'Food'; // Default value
+  late FilterQuery query;
+  String selectedSort = '';
+  String selectedCategory = '';
   TextEditingController minPriceController = TextEditingController();
   TextEditingController maxPriceController = TextEditingController();
+  bool isPriceRangeError = false;
 
-  // Validation for price range
-  String? validatePrice(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field is required';
-    }
-    final number = num.tryParse(value);
-    if (number == null) {
-      return 'Please enter a valid number';
-    }
-    return null;
+  @override
+  void initState(){
+    query = widget.query;
+
+    selectedSort = query.sortBy;
+    selectedCategory = query.category;
+    minPriceController.text = query.priceMin.toString();
+    maxPriceController.text = query.priceMax.toString();
+    minPriceController.addListener(() {
+      query.priceMin = minPriceController.text;});
+    maxPriceController.addListener(() {
+      query.priceMax = maxPriceController.text;});
+    super.initState();
   }
 
   @override
@@ -30,9 +54,12 @@ class _FilterDialogState extends State<FilterDialog> {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
 
     return Dialog(
+      backgroundColor: themeProvider.isDarkMode
+        ? Colors.grey.shade900 : Colors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: Colors.white)
       ),
       child: FractionallySizedBox(
         widthFactor: 1,
@@ -63,7 +90,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   )
                 ],
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 25),
 
               Text(
                 'Sort By',
@@ -89,14 +116,27 @@ class _FilterDialogState extends State<FilterDialog> {
                     onChanged: (String? newValue) {
                       setState(() {
                         selectedSort = newValue!;
+                        query.sortBy = selectedSort;
                       });
                     },
                     isExpanded: true,
-                    items: <String>['~~~~', 'Cheapest', 'Most Expensive']
+                    items: <String>['', 'cheapest', 'most_expensive']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value == ""
+                            ? "~~~~~~~"
+                            : value
+                              .replaceAll('_', ' ')
+                              .split(' ')
+                              .map((word) => word[0].toUpperCase() + word.substring(1))
+                              .join(' '),
+                            style: TextStyle(
+                              color: themeProvider.isDarkMode
+                               ? Colors.white : Colors.black
+                            ),
+                        ),
                       );
                     }).toList(),
                   ),
@@ -116,35 +156,59 @@ class _FilterDialogState extends State<FilterDialog> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Radio<String>(
-                    value: 'Food',
+                    value: '',
                     groupValue: selectedCategory,
+                    activeColor: Colors.brown,
                     onChanged: (String? value) {
                       setState(() {
                         selectedCategory = value!;
+                        query.category = selectedCategory;
                       });
                     },
                   ),
-                  const Text('Food'),
+                  Text('~Both~', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      color: themeProvider.isDarkMode
+                        ? Colors.white : Colors.black
+                    ),
+                  ),
                   Radio<String>(
-                    value: 'Drink',
+                    value: '1',
                     groupValue: selectedCategory,
+                    activeColor: Colors.brown,
                     onChanged: (String? value) {
                       setState(() {
                         selectedCategory = value!;
+                        query.category = selectedCategory;
                       });
                     },
                   ),
-                  const Text('Drink'),
+                  Text(
+                    'Food',
+                    style: TextStyle(
+                      color: themeProvider.isDarkMode
+                        ? Colors.white : Colors.black
+                    ),
+                  ),
                   Radio<String>(
-                    value: 'Both',
+                    value: '2',
                     groupValue: selectedCategory,
+                    activeColor: Colors.brown,
                     onChanged: (String? value) {
                       setState(() {
                         selectedCategory = value!;
+                        query.category = selectedCategory;
                       });
                     },
                   ),
-                  const Text('Both'),
+                  Text(
+                    'Drink',
+                    style: TextStyle(
+                      color: themeProvider.isDarkMode
+                            ? Colors.white : Colors.black),
+                  ),
                 ],
               ),
 
@@ -162,32 +226,103 @@ class _FilterDialogState extends State<FilterDialog> {
                   Expanded(
                     child: TextFormField(
                       controller: minPriceController,
-                      decoration: const InputDecoration(
+                      cursorColor: themeProvider.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                      decoration: InputDecoration(
                         labelText: 'Min Price',
-                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black
+                          )
+                        ),
                       ),
                       keyboardType: TextInputType.number,
-                      validator: validatePrice,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly, 
+                      ],
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
                       controller: maxPriceController,
-                      decoration: const InputDecoration(
+                      cursorColor: themeProvider.isDarkMode
+                        ? Colors.white
+                        : Colors.black,
+                      decoration: InputDecoration(
                         labelText: 'Max Price',
-                        border: OutlineInputBorder(),
+                        labelStyle: TextStyle(
+                          color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: isPriceRangeError
+                            ? Colors.red
+                            : themeProvider.isDarkMode
+                              ? Colors.white : Colors.black)
+                        ),
+                        
                       ),
                       keyboardType: TextInputType.number,
-                      validator: validatePrice,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly, 
+                      ],
                     ),
                   ),
                 ],
               ),
+              if (isPriceRangeError == true)
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Min Price < Max Price',
+                      style: TextStyle(
+                        color: Colors.red),
+                    ),
+                  ],
+                ),
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  
+                  if (query.priceMax != "" && query.priceMin != "") {
+                    if (num.tryParse(query.priceMax)! 
+                          > num.tryParse(query.priceMin)!) {
+                      Navigator.pop(context, query);
+                    } else {setState(() {isPriceRangeError = true;});}
+                  } else {
+                    Navigator.pop(context, query);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -200,10 +335,10 @@ class _FilterDialogState extends State<FilterDialog> {
                   )
                 ),
                 child: Text(
-                  'Login',
+                  'SEARCH',
                   style: TextStyle(
                     color: themeProvider.isDarkMode
-                      ? null : Colors.amber.shade50
+                      ? null : Colors.amber.shade50,
                   ),
                 ),
               ),

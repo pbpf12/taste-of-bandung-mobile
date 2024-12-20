@@ -51,10 +51,13 @@ app.*.map.json
 *.gen.dart
 *.freezed.dart
 *.config.dart
+
 # Environment related
 *.env
+
 # Formatting related
 .prettierignore
 .prettierrc
+
 # Ignore selected_base_url.dart
 lib/core/environments/selected_base_url.dart
