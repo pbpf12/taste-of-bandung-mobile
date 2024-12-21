@@ -65,7 +65,11 @@ class TobBottomNavigationBar extends StatelessWidget {
                     ),
                     Text(
                       feature.text,
-                      style: const TextStyle(fontSize: 10),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: themeProvider.isDarkMode
+                          ? Colors.white : Colors.black
+                      ),
                     )
                   ],
                 ),
