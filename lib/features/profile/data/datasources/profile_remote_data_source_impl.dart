@@ -44,7 +44,6 @@ class ProfileRemoteDataSourcesImplementation
   Future<Either<Exception, UserModel>> updateUserData(dynamic data) async {
     try {
       final request = CookieRequest();
-      print(data);
       final response = await request.postJson(
           "http://${EndPoints().myBaseUrl}/edit_profile_flutter/",
           jsonEncode(data));
@@ -52,7 +51,6 @@ class ProfileRemoteDataSourcesImplementation
 
       return Right(user);
     } catch (e) {
-      print(e.toString());
       throw Left(Exception('Error: $e'));
     }
   }
@@ -72,6 +70,32 @@ class ProfileRemoteDataSourcesImplementation
           .toList();
 
       return Right(history);
+    } catch (e) {
+      throw Left(Exception('Error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, dynamic>> logout() async {
+    try {
+      final request = CookieRequest();
+      final response =
+          await request.get("http://${EndPoints().myBaseUrl}/auth/logout/");
+
+      return Right(response);
+    } catch (e) {
+      throw Left(Exception('Error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, dynamic>> deleteAccount() async {
+    try {
+      final request = CookieRequest();
+      final response =
+          await request.get("http://${EndPoints().myBaseUrl}/delete/");
+
+      return Right(response);
     } catch (e) {
       throw Left(Exception('Error: $e'));
     }

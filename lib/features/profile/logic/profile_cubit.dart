@@ -76,4 +76,41 @@ class ProfileCubit extends Cubit<ProfileState> {
       setApiRequestStatus('ERROR');
     }
   }
+
+  Future<String> logout() async {
+    try {
+      setApiRequestStatus('LOGGING OUT');
+      final resp = await _remoteDataSource.logout();
+
+      await resp.fold((failure) async {
+        setApiRequestStatus('ERROR LOGGING OUT');
+        return "Error Logging Out";
+      }, (success) async {
+        setApiRequestStatus('LOGGED OUT');
+        return "Logged Out";
+      });
+      setApiRequestStatus('LOADED');
+      return "Logged Out";
+    } catch (e) {
+      setApiRequestStatus('ERROR');
+      return "Error Logging Out";
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      setApiRequestStatus('DELETING ACCOUNT');
+      final resp = await _remoteDataSource.deleteAccount();
+
+      await resp.fold((failure) async {
+        setApiRequestStatus('ERROR DELETING ACCOUNT');
+      }, (success) async {
+        setApiRequestStatus('DELETED ACCOUNT');
+      });
+
+      setApiRequestStatus('LOADED');
+    } catch (e) {
+      setApiRequestStatus('ERROR');
+    }
+  }
 }

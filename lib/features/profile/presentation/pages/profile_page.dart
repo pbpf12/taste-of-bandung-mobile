@@ -46,68 +46,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const CircleAvatar( 
-                          radius: 40.0,
-                          backgroundColor: Colors.grey,
-                        ),
-                        const SizedBox(width: 16.0),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [ 
-                            Text(
-                              user.username,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              user.firstName != "" && user.lastName != "" ? '${user.firstName} ${user.lastName}' : "Not Provided",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            Text(
-                              user.email,
-                              style: const TextStyle(
-                                fontSize: 14.0,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditProfilePage(
-                                  firstName: user.firstName,
-                                  lastName: user.lastName,
-                                  email: user.email,
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text("Edit Profile"),
-                        ),
-                      ],
-                    ),
+                    ProfileBar(user: user),
                     const SizedBox(height: 24.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         const Text(
-                          "History",
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        const Row (
+                          children: [ 
+                            Text(
+                              "History",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 8.0),
+                          ],
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -164,22 +118,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            final response = await request.logout(
-                              "http://${EndPoints().myBaseUrl}/auth/logout/",
-                            );
-                            String message = response["message"];
+                            final response = await _profileCubit.logout();
+                            String message = response;
                             if (context.mounted) {
-                              if (response['status']) {
+                              if (message == "Logged Out") {
                                 await request.local.remove('user_credentials');
-                                String uname = response["username"];
+                                String uname = user.username;
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()),
+                                  MaterialPageRoute(builder: (context) => const LoginPage()),
                                 );
-                                SuccessMessenger(
-                                        "$message Sampai jumpa, $uname.")
-                                    .show(context);
+                                SuccessMessenger("$message Sampai jumpa, $uname.").show(context);
                               } else {
                                 ErrorMessenger(message).show(context);
                               }
@@ -187,12 +136,40 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                           child: const Text('Logout'),
                         ),
-                        CupertinoSwitch(
-                          value: themeProvider.isDarkMode,
-                          onChanged: (value) {
-                            themeProvider.toggleTheme();
-                          },
-                        ),
+                        const ThemeToggler(),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete Account"),
+                                    content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close the dialog
+                                        },
+                                        child: const Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          _profileCubit.deleteAccount();
+                                          Navigator.of(context).pop(); // Close the dialog
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const LoginPage()),
+                                          );
+                                        },
+                                        child: const Text("Delete"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text('Delete Account'),
+                        )
                       ],
                     ),
                   ],
