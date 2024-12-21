@@ -51,8 +51,12 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bookmarks'),
-        backgroundColor: const Color.fromARGB(255, 163, 103, 71),
+        title: const Text(
+          'Bookmarks',
+          style: TextStyle(color: Color.fromARGB(255, 255, 249, 196)), // AppBar text color
+        ),
+        backgroundColor: const Color.fromARGB(255, 93, 64, 55),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 162, 102, 70)), // AppBar icon color
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -86,7 +90,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
               return const Center(
                 child: Text(
                   'No bookmarks available.',
-                  style: TextStyle(fontSize: 18.0),
+                  style: TextStyle(fontSize: 18.0, color: Colors.red),
                 ),
               );
             } else {
@@ -98,9 +102,20 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   return Card(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    color: const Color.fromARGB(255, 175, 124, 97),
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Color.fromARGB(255, 255, 249, 196), width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: ListTile(
-                      title: Text(bookmark.dishName),
-                      subtitle: Text(bookmark.restaurantName),
+                      title: Text(
+                        bookmark.dishName,
+                        style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
+                      ),
+                      subtitle: Text(
+                        bookmark.restaurantName,
+                        style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
+                      ),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () async {
