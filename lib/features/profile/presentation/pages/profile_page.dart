@@ -14,7 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _profileCubit = get.get<ProfileCubit>();
-    retrieveData();
+    _profileCubit.retrieveData();
   }
 
   @override
@@ -48,21 +48,37 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar( 
-                          child: Text(
-                            user.username,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                        const CircleAvatar( 
+                          radius: 40.0,
+                          backgroundColor: Colors.grey,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [ 
+                            Text(
+                              user.username,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
+                            Text(
+                              user.firstName != "" && user.lastName != "" ? '${user.firstName} ${user.lastName}' : "Not Provided",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(width: 16.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${user?.firstName ?? 'Not provided'} ${user?.lastName ?? 'Not provided'}",
+                              "${user.firstName} ${user.lastName}",
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
@@ -70,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              user!.email,
+                              user.email,
                               style: const TextStyle(
                                 fontSize: 14.0,
                                 color: Colors.grey,
@@ -97,19 +113,63 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                     const SizedBox(height: 24.0),
-                    const Text(
-                      "History",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                         const Text(
+                          "History",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            _profileCubit.clearHistory();
+                          },
+                          child: const Icon(Icons.delete)
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8.0),
-                    Text(
-                      "You have ${state.history.length} orders",
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey,
+                    Expanded(
+                      child: ListView.builder(
+                      itemCount: state.history.length,
+                      itemBuilder: (context, index) {
+                        final order = state.history[index];
+                        return Card(
+                          child: Row (
+                            children: [
+                              const SizedBox(width: 16.0),
+                              const CircleAvatar(
+                                radius: 20.0,
+                                backgroundColor: Colors.grey,
+                              ),
+                              const SizedBox(width: 16.0),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    order.dish.name,
+                                    style: const TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4.0),
+                                  Text(
+                                    order.createdAt.toString().substring(0, 10),
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                     const Spacer(),

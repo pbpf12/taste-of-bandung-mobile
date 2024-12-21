@@ -33,8 +33,42 @@ class ProfileRemoteDataSourcesImplementation
       final response =
           await request.get("http://${EndPoints().myBaseUrl}/show_json/");
       final user = UserModel.fromJson(response);
-      
+
       return Right(user);
+    } catch (e) {
+      throw Left(Exception('Error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, UserModel>> updateUserData(dynamic data) async {
+    try {
+      final request = CookieRequest();
+      final response = await request.postJson(
+          "http://${EndPoints().myBaseUrl}/edit_profile/", data);
+      final user = UserModel.fromJson(response);
+
+      return Right(user);
+    } catch (e) {
+      throw Left(Exception('Error: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Exception, List<HistoryModel>>> clearHistory() async {
+    try {
+      final request = CookieRequest();
+      final response =
+          await request.get("http://${EndPoints().myBaseUrl}/clear_history/");
+
+      final List<HistoryModel> history = (response['history'] as List)
+          .map((item) => HistoryModel(
+                dish: DishModel.fromJson(item['dish']),
+                createdAt: DateTime.parse(item['created_at']),
+              ))
+          .toList();
+
+      return Right(history);
     } catch (e) {
       throw Left(Exception('Error: $e'));
     }

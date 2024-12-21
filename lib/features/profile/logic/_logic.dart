@@ -8,3 +8,5 @@ import 'package:equatable/equatable.dart';
 
 part 'profile_cubit.dart';
 part 'profile_state.dart';
+part 'edit_profile_cubit.dart';
+part 'edit_profile_state.dart';

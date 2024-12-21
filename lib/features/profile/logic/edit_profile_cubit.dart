@@ -3,10 +3,10 @@
 part of '_logic.dart';
 
 @injectable
-class ProfileCubit extends Cubit<ProfileState> {
+class EditProfileCubit extends Cubit<EditProfileState> {
   final ProfileRemoteDataSource _remoteDataSource;
 
-  ProfileCubit(this._remoteDataSource) : super(const ProfileState());
+  EditProfileCubit(this._remoteDataSource) : super(const EditProfileState());
 
   void setApiRequestStatus(String status) async {
     if (kDebugMode) {
@@ -22,10 +22,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void setHistoryData(List<HistoryModel> newHistorydata) {
-    emit(state.copyWith(history: newHistorydata));
-  }
-
   void setProfileData(UserModel newUserData) {
     emit(state.copyWith(user: newUserData));
   }
@@ -34,7 +30,6 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       setApiRequestStatus('LOADING');
       final resp = await _remoteDataSource.getUserData();
-      final resp2 = await _remoteDataSource.getHistory();
 
       await resp.fold((failure) async {
         setApiRequestStatus('ERROR LOADING USER');
@@ -44,31 +39,23 @@ class ProfileCubit extends Cubit<ProfileState> {
         setProfileData(data);
       });
 
-      await resp2.fold((failure) async {
-        setApiRequestStatus('ERROR LOADING HISTORY');
-      }, (success) async {
-        setApiRequestStatus('LOADED HISTORY');
-        final data = success;
-        setHistoryData(data);
-      });
-
       setApiRequestStatus('LOADED');
     } catch (e) {
       setApiRequestStatus('ERROR');
     }
   }
 
-  Future<void> clearHistory() async {
+  Future<void> updateUserData(dynamic data) async {
     try {
-      setApiRequestStatus('CLEARING');
-      final resp = await _remoteDataSource.clearHistory();
+      setApiRequestStatus('LOADING');
+      final resp = await _remoteDataSource.updateUserData(data);
 
       await resp.fold((failure) async {
-        setApiRequestStatus('ERROR CLEARING HISTORY');
+        setApiRequestStatus('ERROR UPDATING USER');
       }, (success) async {
-        setApiRequestStatus('CLEARED HISTORY');
+        setApiRequestStatus('LOADED USER');
         final data = success;
-        setHistoryData(data);
+        setProfileData(data);
       });
 
       setApiRequestStatus('LOADED');

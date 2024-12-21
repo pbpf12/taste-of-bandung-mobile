@@ -35,6 +35,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i909.SearchCubit(gh<_i485.SearchRemoteDataSource>()));
     gh.factory<_i715.ProfileCubit>(
         () => _i715.ProfileCubit(gh<_i735.ProfileRemoteDataSource>()));
+    gh.factory<_i715.EditProfileCubit>(
+        () => _i715.EditProfileCubit(gh<_i735.ProfileRemoteDataSource>()));
     return this;
   }
 }
