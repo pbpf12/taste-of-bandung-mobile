@@ -52,7 +52,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bookmarks'),
-        backgroundColor: const Color.fromARGB(255, 157, 115, 93),
+        backgroundColor: const Color.fromARGB(255, 155, 99, 69),
       ),
       body: Container(
         decoration: const BoxDecoration(
