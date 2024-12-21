@@ -1,7 +1,3 @@
-// lib/features/prodetail/presentation/widgets/restaurant_modal.dart
-
-// ignore_for_file: use_super_parameters
-
 import 'package:flutter/material.dart';
 import '../themes/app_colors.dart';
 import '../data/models/restaurant_model.dart';
@@ -9,7 +5,7 @@ import '../data/models/restaurant_model.dart';
 class RestaurantModal extends StatelessWidget {
   final RestaurantModel restaurant;
 
-  const RestaurantModal({Key? key, required this.restaurant}) : super(key: key);
+  const RestaurantModal({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +15,7 @@ class RestaurantModal extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView( // Added for overflow
+        child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,12 +40,15 @@ class RestaurantModal extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    restaurant.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.text,
+                  Expanded(
+                    child: Text(
+                      restaurant.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.text,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   IconButton(
@@ -93,12 +92,17 @@ class RestaurantModal extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: AppColors.primary),
           const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(color: Colors.grey),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(color: Colors.grey),
+              softWrap: true,
+              overflow: TextOverflow.visible,
+            ),
           ),
         ],
       ),

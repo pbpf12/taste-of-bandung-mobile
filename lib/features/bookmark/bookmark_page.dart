@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:tasteofbandung/features/prodetail/prodetail_screen.dart';
 import '../../core/environments/_environments.dart';
 import 'package/../models/bookmark_model.dart';
 
@@ -31,7 +32,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
   Future<void> deleteBookmark(CookieRequest request, int bookmarkId) async {
     final response = await request.post(
-      'http://localhost:8000/delete_bookmark/',
+      'http://${EndPoints().myBaseUrl}/delete_bookmark/',
       {'id': bookmarkId.toString()},
     );
     if (response['status'] == 'Bookmark deleted successfully') {
@@ -99,29 +100,38 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 itemCount: bookmarks.length,
                 itemBuilder: (context, index) {
                   final bookmark = bookmarks[index];
-                  return Card(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    color: const Color.fromARGB(255, 175, 124, 97),
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Color.fromARGB(255, 255, 249, 196), width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        bookmark.dishName,
-                        style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
+                  return InkWell(
+                    onTap: () async {
+                      await Navigator.push(
+                        context, MaterialPageRoute(
+                          builder: (context) => ProdetailScreen(dishId: bookmark.dishId)));
+                      // reload the future builder to get the latest update (there is a possible chance of user removing the bookmarked dish)
+                      setState(() {});
+                    },
+                    child: Card(
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      color: const Color.fromARGB(255, 175, 124, 97),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Color.fromARGB(255, 255, 249, 196), width: 1),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      subtitle: Text(
-                        bookmark.restaurantName,
-                        style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          await deleteBookmark(request, bookmark.id);
-                          setState(() {});
-                        },
+                      child: ListTile(
+                        title: Text(
+                          bookmark.dishName,
+                          style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
+                        ),
+                        subtitle: Text(
+                          bookmark.restaurantName,
+                          style: const TextStyle(color: Color.fromARGB(255, 255, 249, 196)),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () async {
+                            await deleteBookmark(request, bookmark.id);
+                            setState(() {});
+                          },
+                        ),
                       ),
                     ),
                   );
