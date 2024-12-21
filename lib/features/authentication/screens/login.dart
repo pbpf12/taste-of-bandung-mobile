@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                               ? Colors.brown.shade500 : Colors.brown.shade200, width: 2)
                         ),
                         contentPadding:
-                            EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                         floatingLabelBehavior: FloatingLabelBehavior.always
                       ),
                       obscureText: true,
