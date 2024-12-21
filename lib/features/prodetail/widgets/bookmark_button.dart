@@ -7,13 +7,14 @@ class BookmarkButton extends StatefulWidget {
   final Function(bool) onBookmarkToggle;
 
   const BookmarkButton({
-    Key? key,
+    super.key,
     required this.isBookmarked,
     required this.bookmarkCount,
     required this.onBookmarkToggle,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _BookmarkButtonState createState() => _BookmarkButtonState();
 }
 
@@ -67,9 +68,11 @@ class _BookmarkButtonState extends State<BookmarkButton> {
           ),
         ),
         const SizedBox(width: 12),
-        Text(
-          '${widget.bookmarkCount} people bookmarked this dish',
-          style: const TextStyle(color: Colors.grey),
+        Expanded(
+          child: Text(
+            '${widget.bookmarkCount} people bookmarked this dish',
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
     );

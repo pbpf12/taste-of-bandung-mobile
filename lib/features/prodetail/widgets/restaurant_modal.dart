@@ -1,5 +1,7 @@
 // lib/features/prodetail/presentation/widgets/restaurant_modal.dart
 
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 import '../themes/app_colors.dart';
 import '../data/models/restaurant_model.dart';

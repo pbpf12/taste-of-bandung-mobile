@@ -7,7 +7,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'data/api_service.dart';
 import 'data/models/dish_model.dart';
 import 'data/models/review_model.dart';
-import 'data/models/restaurant_model.dart';
 import 'widgets/bookmark_button.dart';
 import 'widgets/rating_stars.dart' as stars;
 import 'widgets/restaurant_modal.dart' as modal;
@@ -434,7 +433,7 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                         ),
                         const SizedBox(height: 24),
                         // Reviews Section
-                        Text(
+                        const Text(
                           'Customer Reviews',
                           style: TextStyle(
                             fontSize: 22,
@@ -478,7 +477,7 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                               ),
                         const SizedBox(height: 24),
                         // Submit Review Form
-                        Text(
+                        const Text(
                           'Write a Review',
                           style: TextStyle(
                             fontSize: 22,
@@ -548,7 +547,6 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                               // Submit Button
                               ElevatedButton(
                                 onPressed: _submitReview,
-                                child: const Text('Submit Review'),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
                                   foregroundColor: AppColors.text,
@@ -557,6 +555,7 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
+                                child: const Text('Submit Review'),
                               ),
                             ],
                           ),
