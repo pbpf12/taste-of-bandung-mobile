@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
   }
   
   void goToDetailScreen(int dishId) => Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => ProdetailScreen(dihsId: dishId)));
+      MaterialPageRoute(builder: (context) => ProdetailScreen(dishId: dishId,)));
 
   @override
   Widget build(BuildContext context) {
