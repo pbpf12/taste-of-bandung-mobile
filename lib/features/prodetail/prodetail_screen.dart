@@ -111,18 +111,19 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
   Future<void> _submitReview() async {
     if (_selectedRating == 0 || _commentController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please provide a rating and comment')),
+        const SnackBar(content: Text('Please provide both rating and comment')),
       );
       return;
     }
 
     try {
+      setState(() => _isLoading = true);
       final request = context.read<CookieRequest>();
-
+      
       final newReview = await _apiService.submitReview(
         dishId,
         _selectedRating,
-        _commentController.text,
+        _commentController.text.trim(),
         request,
       );
 
@@ -133,6 +134,7 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
         _calculateAndSetAverageRating();
         _selectedRating = 0;
         _commentController.clear();
+        _isLoading = false;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -140,6 +142,7 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
       );
     } catch (e) {
       if (!mounted) return;
+      setState(() => _isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to submit review: $e')),
       );
@@ -454,8 +457,12 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                                   final review = _reviews[index];
                                   return ReviewCard(
                                     review: review,
-                                    onEdit: () {
-                                      _showEditReviewDialog(review);
+                                    onEdit: (newRating, newComment) {
+                                      _editReview(
+                                        review.id, 
+                                        newRating,
+                                        newComment
+                                      );
                                     },
                                     onDelete: () {
                                       _deleteReview(review.id);
@@ -558,74 +565,6 @@ class _ProdetailScreenState extends State<ProdetailScreen> {
                     ),
                   ),
                 ),
-    );
-  }
-
-  /// Displays a dialog to edit an existing review.
-  void _showEditReviewDialog(ReviewModel review) {
-    int editedRating = review.rating;
-    TextEditingController editedCommentController =
-        TextEditingController(text: review.comment);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Edit Review'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                stars.RatingStars(
-                  rating: editedRating,
-                  size: 32,
-                  activeColor: AppColors.primary,
-                  inactiveColor: Colors.grey[300]!,
-                  interactive: true,
-                  onRatingChanged: (rating) {
-                    setState(() {
-                      editedRating = rating;
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: editedCommentController,
-                  maxLines: 4,
-                  decoration: const InputDecoration(
-                    hintText: 'Edit your comment...',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (editedRating == 0 || editedCommentController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please provide a rating and comment')),
-                  );
-                  return;
-                }
-                _editReview(review.id, editedRating, editedCommentController.text);
-                Navigator.of(context).pop(); // Close dialog
-              },
-              child: const Text('Save'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.text,
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }

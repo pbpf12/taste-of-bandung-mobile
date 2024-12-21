@@ -31,33 +31,55 @@ class ApiService {
 
     return BookmarkResponse.fromJson(response);
   }
+  Future<ReviewModel> submitReview(
+    int dishId,
+    int rating,
+    String comment,
+    CookieRequest request,
+  ) async {
+    try {
+      // Change this line - send as form data instead of JSON
+      final response = await request.post(
+        '$baseUrl/dishes/$dishId/reviews/',
+        {
+          'rating': rating.toString(), // Convert to string
+          'comment': comment,
+        },
+      );
 
-  /// Submits a new review for a dish.
-  Future<ReviewModel> submitReview(int dishId, int rating, String comment, CookieRequest request) async {
-    final response = await request.post("$baseUrl/dishes/$dishId/reviews/", {
-      'rating': rating.toString(),
-      'comment': comment,
-    });
+      if (response['status'] != 'success') {
+        throw Exception(response['message'] ?? 'Failed to submit review');
+      }
 
-    if (response['status'] != 'success') {
-      throw Exception(response['message'] ?? 'Failed to submit review.');
+      return ReviewModel.fromJson(response['review']);
+    } catch (e) {
+      throw Exception('Failed to submit review: $e');
     }
-
-    return ReviewModel.fromJson(response['review']);
   }
 
-  /// Edits an existing review.
-  Future<ReviewModel> editReview(int reviewId, int rating, String comment, CookieRequest request) async {
-    final response = await request.post("$baseUrl/reviews/$reviewId/edit/", {
-      'rating': rating.toString(),
-      'comment': comment,
-    });
+  Future<ReviewModel> editReview(
+    int reviewId,
+    int rating,
+    String comment,
+    CookieRequest request,
+  ) async {
+    try {
+      final response = await request.post(
+        "$baseUrl/reviews/$reviewId/edit/",
+        {
+          'rating': rating.toString(), // Convert to string
+          'comment': comment,
+        },
+      );
 
-    if (response['status'] != 'success') {
-      throw Exception(response['message'] ?? 'Failed to edit review.');
+      if (response['status'] != 'success') {
+        throw Exception(response['message'] ?? 'Failed to edit review');
+      }
+
+      return ReviewModel.fromJson(response['review']);
+    } catch (e) {
+      throw Exception('Failed to edit review: $e');
     }
-
-    return ReviewModel.fromJson(response['review']);
   }
 
   /// Deletes a review.
@@ -69,17 +91,25 @@ class ApiService {
     }
   }
 
-  /// Votes on a review (upvote or downvote).
-  Future<VoteResponse> voteReview(int reviewId, String voteType, CookieRequest request) async {
-    final response = await request.post("$baseUrl/reviews/$reviewId/vote/", {
-      'vote_type': voteType, // e.g., 'upvote' or 'downvote'
-    });
+  Future<VoteResponse> voteReview(
+    int reviewId,
+    String voteType,
+    CookieRequest request,
+  ) async {
+    try {
+      final response = await request.post(
+        "$baseUrl/reviews/$reviewId/vote/$voteType/",
+        jsonEncode({}),
+      );
 
-    if (response['status'] != 'success') {
-      throw Exception(response['message'] ?? 'Failed to vote on review.');
+      if (response['status'] != 'success') {
+        throw Exception(response['message'] ?? 'Failed to vote on review');
+      }
+
+      return VoteResponse.fromJson(response);
+    } catch (e) {
+      throw Exception('Failed to vote on review: $e');
     }
-
-    return VoteResponse.fromJson(response);
   }
 
   /// Fetches details of a restaurant.

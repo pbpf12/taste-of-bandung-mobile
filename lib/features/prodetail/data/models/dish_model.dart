@@ -1,30 +1,28 @@
 // lib/data/models/dish_model.dart
 
 class DishModel {
-  int id;
-  String name;
-  String description;
-  String price;
-  String? category;
-  int restaurantId;
-  String restaurantName;
-  double averageRating; // Made mutable
-  int bookmarkCount; // Made mutable
-  bool isBookmarked; // Made mutable
-  String? image;
+  final int id;
+  final String name;
+  final String description;
+  final double price;  // Changed from dynamic to double
+  final String? image;
+  final int restaurantId;
+  final String restaurantName;
+  double averageRating;  // Changed from dynamic to double
+  int bookmarkCount;
+  bool isBookmarked;
 
   DishModel({
     required this.id,
     required this.name,
     required this.description,
     required this.price,
-    this.category,
+    this.image,
     required this.restaurantId,
     required this.restaurantName,
     required this.averageRating,
     required this.bookmarkCount,
     required this.isBookmarked,
-    this.image,
   });
 
   factory DishModel.fromJson(Map<String, dynamic> json) {
@@ -32,14 +30,17 @@ class DishModel {
       id: json['id'],
       name: json['name'],
       description: json['description'],
-      price: json['price'],
-      category: json['category'],
+      // Convert price string to double
+      price: double.parse(json['price'].toString()),
+      image: json['image'],
       restaurantId: json['restaurant_id'],
       restaurantName: json['restaurant_name'],
-      averageRating: (json['average_rating'] as num?)?.toDouble() ?? 0.0,
-      bookmarkCount: json['bookmark_count'],
-      isBookmarked: json['is_bookmarked'],
-      image: json['image'],
+      // Convert average_rating to double, default to 0.0 if null
+      averageRating: json['average_rating'] != null 
+          ? double.parse(json['average_rating'].toString())
+          : 0.0,
+      bookmarkCount: json['bookmark_count'] ?? 0,
+      isBookmarked: json['is_bookmarked'] ?? false,
     );
   }
 }

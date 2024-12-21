@@ -5,7 +5,7 @@ import 'rating_stars.dart';
 
 class ReviewCard extends StatefulWidget {
   final ReviewModel review;
-  final VoidCallback? onEdit;
+  final Function(int rating, String comment)? onEdit;
   final VoidCallback? onDelete;
   final Function(int)? onUpvote;
   final Function(int)? onDownvote;
@@ -39,6 +39,31 @@ class _ReviewCardState extends State<ReviewCard> {
   void dispose() {
     _commentController.dispose();
     super.dispose();
+  }
+
+    void _handleSave() {
+      if (_editedRating == 0 || _commentController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please provide both rating and comment')),
+        );
+        return;
+      }
+      
+      // Pass the edited values
+      widget.onEdit?.call(_editedRating, _commentController.text.trim());
+      
+      setState(() {
+        _isEditing = false;
+      });
+    }
+
+  void _handleCancel() {
+    // Reset the edited values to original
+    setState(() {
+      _commentController.text = widget.review.comment;
+      _editedRating = widget.review.rating;
+      _isEditing = false;
+    });
   }
 
   @override
@@ -75,6 +100,7 @@ class _ReviewCardState extends State<ReviewCard> {
                     _isEditing
                         ? RatingStars(
                             rating: _editedRating,
+                            size: 24,
                             interactive: true,
                             onRatingChanged: (rating) {
                               setState(() {
@@ -82,7 +108,10 @@ class _ReviewCardState extends State<ReviewCard> {
                               });
                             },
                           )
-                        : RatingStars(rating: widget.review.rating),
+                        : RatingStars(
+                            rating: widget.review.rating,
+                            size: 24,
+                          ),
                   ],
                 ),
               ],
@@ -90,22 +119,29 @@ class _ReviewCardState extends State<ReviewCard> {
             if (widget.review.isAuthor)
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(_isEditing ? Icons.save : Icons.edit),
-                    onPressed: () {
-                      if (_isEditing) {
-                        // Save logic would go here
-                        widget.onEdit?.call();
-                      }
-                      setState(() {
-                        _isEditing = !_isEditing;
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: widget.onDelete,
-                  ),
+                  if (_isEditing) ...[
+                    IconButton(
+                      icon: const Icon(Icons.check),
+                      onPressed: _handleSave,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: _handleCancel,
+                    ),
+                  ] else ...[
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        setState(() {
+                          _isEditing = true;
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: widget.onDelete,
+                    ),
+                  ],
                 ],
               ),
           ],
@@ -114,7 +150,9 @@ class _ReviewCardState extends State<ReviewCard> {
         _isEditing
             ? TextField(
                 controller: _commentController,
+                maxLines: 3,
                 decoration: InputDecoration(
+                  hintText: 'Write your review...',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
