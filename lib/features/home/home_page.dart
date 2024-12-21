@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:tasteofbandung/core/environments/_environments.dart';
+import 'package:tasteofbandung/features/prodetail/prodetail_screen.dart';
 import 'dart:convert';
 import 'models/dish_model.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchDishes() async {
     try {
       final response =
-          await http.get(Uri.parse('http://127.0.0.1:8000/landing/json/'));
+          await http.get(Uri.parse('http://${EndPoints().myBaseUrl}/landing/json/'));
       if (response.statusCode == 200) {
         setState(() {
           dishes = dishesLandingFromJson(response.body);
@@ -65,13 +67,12 @@ class _HomePageState extends State<HomePage> {
     try {
       final request = CookieRequest();
       final response = await request.postJson(
-        "http://127.0.0.1:8000/landing/create-suggestion-flutter/",
+        "http://${EndPoints().myBaseUrl}/landing/create-suggestion-flutter/",
         jsonEncode(<String, String>{
             'suggestionMessage': suggestionMessage
-          // TODO: Sesuaikan field data sesuai dengan aplikasimu
         }),
       );
-      if (response.statusCode == 200) {
+      if (response['status'] == "success") {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Suggestion submitted successfully!')),
         );
@@ -108,7 +109,6 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
-  
             children: [
               const SizedBox(height: 40),
               Text(
@@ -172,7 +172,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              Expanded(
+              SizedBox(
+                height: 200,
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : dishes.isNotEmpty
@@ -184,71 +185,79 @@ class _HomePageState extends State<HomePage> {
                               return Container(
                                 width: 160,
                                 margin: const EdgeInsets.only(right: 16.0),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  elevation: 8.0,
-                                  color: themeProvider.isDarkMode
-                                      ? Colors.brown.shade200
-                                      : Colors.amber.shade50,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(12.0),
-                                          topRight: Radius.circular(12.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context, MaterialPageRoute(
+                                        builder: (context) 
+                                        => ProdetailScreen(dishId: dishes[index].pk)));
+                                  },
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    elevation: 8.0,
+                                    color: themeProvider.isDarkMode
+                                        ? Colors.brown.shade200
+                                        : Colors.amber.shade50,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(12.0),
+                                            topRight: Radius.circular(12.0),
+                                          ),
+                                          child: Image.network(
+                                            dish.image,
+                                            height: 100,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                        child: Image.network(
-                                          dish.image,
-                                          height: 100,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                dish.name,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: themeProvider.isDarkMode
+                                                      ? Colors.brown.shade800
+                                                      : Colors.brown.shade700,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                'Rating: ${dish.averageRating ?? "N/A"}',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: themeProvider.isDarkMode
+                                                      ? Colors.grey.shade700
+                                                      : Colors.brown.shade500,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Price: \$${dish.price}',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: themeProvider.isDarkMode
+                                                      ? Colors.grey.shade700
+                                                      : Colors.brown.shade500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              dish.name,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: themeProvider.isDarkMode
-                                                    ? Colors.brown.shade800
-                                                    : Colors.brown.shade700,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              'Rating: ${dish.averageRating ?? "N/A"}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: themeProvider.isDarkMode
-                                                    ? Colors.grey.shade700
-                                                    : Colors.brown.shade500,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Price: \$${dish.price}',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: themeProvider.isDarkMode
-                                                    ? Colors.grey.shade700
-                                                    : Colors.brown.shade500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
