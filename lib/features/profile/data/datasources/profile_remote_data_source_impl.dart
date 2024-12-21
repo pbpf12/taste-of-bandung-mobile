@@ -49,7 +49,6 @@ class ProfileRemoteDataSourcesImplementation
           "http://${EndPoints().myBaseUrl}/edit_profile_flutter/",
           jsonEncode(data));
       final user = UserModel.fromJson(response);
-      print("user firstname: ${user.firstName}");
 
       return Right(user);
     } catch (e) {
