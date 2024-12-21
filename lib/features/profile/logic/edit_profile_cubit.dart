@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 part of '_logic.dart';
 
 @injectable
@@ -36,6 +34,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
       }, (success) async {
         setApiRequestStatus('LOADED USER');
         final data = success;
+        print('User Data: ${data.username}');  
         setProfileData(data);
       });
 

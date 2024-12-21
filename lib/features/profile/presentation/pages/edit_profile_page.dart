@@ -64,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           IconButton(
             onPressed: () {
               updateData();
-              context.read<EditProfileCubit>().updateUserData({
+              _editProfileCubit.updateUserData({
                 'first_name': _firstNameController.text,
                 'last_name': _lastNameController.text,
                 'email': _emailController.text,
@@ -86,6 +86,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               return Center(child: Text("Error: ${state.isError}"));
             } else if (state.isLoaded) {
               final user = state.user!;
+              print('User Data Profile: ${user.lastName}');
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

@@ -71,20 +71,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontWeight: FontWeight.normal,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(width: 16.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${user.firstName} ${user.lastName}",
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4.0),
                             Text(
                               user.email,
                               style: const TextStyle(

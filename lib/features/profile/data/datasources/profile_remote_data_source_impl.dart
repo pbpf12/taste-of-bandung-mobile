@@ -44,12 +44,16 @@ class ProfileRemoteDataSourcesImplementation
   Future<Either<Exception, UserModel>> updateUserData(dynamic data) async {
     try {
       final request = CookieRequest();
+      print(data);
       final response = await request.postJson(
-          "http://${EndPoints().myBaseUrl}/edit_profile/", data);
+          "http://${EndPoints().myBaseUrl}/edit_profile_flutter/",
+          jsonEncode(data));
       final user = UserModel.fromJson(response);
+      print("user firstname: ${user.firstName}");
 
       return Right(user);
     } catch (e) {
+      print(e.toString());
       throw Left(Exception('Error: $e'));
     }
   }
